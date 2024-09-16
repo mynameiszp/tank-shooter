@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _movSpeed;
+    [SerializeField] private float _movementSpeed;
     [SerializeField] private float _rotationDegree;
     private Vector2 _moveInput;
 
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveHorizontally()
     {
-        transform.Translate(new Vector2(_moveInput.y * _movSpeed, 0));
+        transform.Translate(new Vector2(_moveInput.y * _movementSpeed, 0));
     }
 
     private void Rotate()
