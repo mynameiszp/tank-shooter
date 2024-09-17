@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private ObjectPoolConfig _bulletPoolConfig;
+    [SerializeField] private ObjectPoolConfig _playerBulletPoolConfig;
     [SerializeField] private ObjectPoolConfig _tankPoolConfig;
 
     void Start()
     {
-        InitializeList(_bulletPoolConfig);
+        InitializeList(_playerBulletPoolConfig);
         InitializeList(_tankPoolConfig);
     }
 
-    public GameObject GetBullet()
+    public GameObject GetPlayerBullet()
     {
-        return GetPooledObject(_bulletPoolConfig);
+        return GetPooledObject(_playerBulletPoolConfig);
     }    
     
     public GameObject GetTank()
@@ -28,7 +28,7 @@ public class ObjectPool : MonoBehaviour
         GameObject tmp;
         for (int i = 0; i < config.poolCapacity; i++)
         {
-            tmp = Instantiate(config.objectPrefab);
+            tmp = Instantiate(config.objectPrefab, config.parentObject);
             tmp.SetActive(false);
             config.pooledObjects.Add(tmp);
         }

@@ -123,6 +123,42 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &138311628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 138311629}
+  m_Layer: 0
+  m_Name: Bullets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &138311629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138311628}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &156217999 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8930994768440835, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
+  m_PrefabInstance: {fileID: 5659535967725239921}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &258840774
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 258840775}
   - component: {fileID: 258840776}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6545,7 +6581,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 654639693}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MovementBoundary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6615,11 +6651,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383c368ddd21f5a4cbf47f32d47308ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPoolConfig:
+  _playerBulletPoolConfig:
+    parentObject: {fileID: 138311629}
     poolCapacity: 3
     objectPrefab: {fileID: 4946420921237225799, guid: e0fe392f9a4a63f4fb755e68d8f868db, type: 3}
     pooledObjects: []
   _tankPoolConfig:
+    parentObject: {fileID: 1965340876}
     poolCapacity: 2
     objectPrefab: {fileID: 7758391093305072673, guid: 50d1fbc3ee5486047b8cff49de8c704c, type: 3}
     pooledObjects: []
@@ -6726,7 +6764,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1162788882}
   - component: {fileID: 1162788883}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6803,7 +6841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1247194519}
   - component: {fileID: 1247194520}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6962,7 +7000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1525865392}
   - component: {fileID: 1525865393}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7058,7 +7096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b292759348255499d3f726e839f47b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectPool: {fileID: 0}
+  _objectPool: {fileID: 703648686}
 --- !u!4 &1565696934
 Transform:
   m_ObjectHideFlags: 0
@@ -7207,6 +7245,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1965340875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1965340876}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1965340876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965340875}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5659535967725239921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7255,6 +7324,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2535035955157037568, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
+      propertyPath: _movementSpeed
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 4289493531048962804, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
+      propertyPath: _barrel
+      value: 
+      objectReference: {fileID: 156217999}
     - target: {fileID: 6785218533983024774, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
       propertyPath: m_Name
       value: Player
@@ -7334,3 +7411,5 @@ SceneRoots:
   - {fileID: 654639693}
   - {fileID: 703648685}
   - {fileID: 518027274}
+  - {fileID: 138311629}
+  - {fileID: 1965340876}

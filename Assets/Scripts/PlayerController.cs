@@ -6,6 +6,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _rotationDegree;
     private Vector2 _moveInput;
+    private PlayerTank _playerTank;
+
+    private void Awake()
+    {
+        if (TryGetComponent(out PlayerTank playerTank))
+        {
+            _playerTank = playerTank;
+        }
+    }
 
     void FixedUpdate()
     {
@@ -20,7 +29,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputValue input)
     {
-        Debug.Log("Fire");
+        if (_playerTank == null) return;
+        _playerTank.Fire();
     }
 
     private void MoveHorizontally()

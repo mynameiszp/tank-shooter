@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 201014053113081769}
   - component: {fileID: 5083210739050419442}
   - component: {fileID: 2535035955157037568}
+  - component: {fileID: 4289493531048962804}
   - component: {fileID: 65198919349832824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,6 +77,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 0
   _rotationDegree: 1
+--- !u!114 &4289493531048962804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6785218533983024774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdec2dc1b69d23543aaeafd5bf05282e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &65198919349832824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tank_basic_red
       objectReference: {fileID: 0}
+    - target: {fileID: 1614768868789991845, guid: 467d703835d044cb4a8a38c24aa1bc79, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1614768868789991846, guid: 467d703835d044cb4a8a38c24aa1bc79, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -237,6 +254,10 @@ PrefabInstance:
     - target: {fileID: 1614768870270142966, guid: 467d703835d044cb4a8a38c24aa1bc79, type: 3}
       propertyPath: m_SortingLayerID
       value: 1063865741
+      objectReference: {fileID: 0}
+    - target: {fileID: 1614768870270142967, guid: 467d703835d044cb4a8a38c24aa1bc79, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
