@@ -2,11 +2,11 @@ using Zenject;
 
 public class PlayerTank : Tank
 {
-    [Inject] protected ObjectPool objectPool;
+    [Inject] private ObjectPool _objectPool;
 
     public override void Fire()
     {
-        var bullet = objectPool.GetPlayerBullet();
+        var bullet = _objectPool.GetPlayerBullet();
         if (bullet != null)
         {
             InitializeBullet(bullet);

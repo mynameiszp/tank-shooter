@@ -1,15 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private ObjectPoolConfig _playerBulletPoolConfig;
-    [SerializeField] private ObjectPoolConfig _tankPoolConfig;
+    public event Action OnAllEnemiesDeath;
 
-    void Start()
+    [SerializeField] private ObjectPoolConfig _playerBulletPoolConfig;
+    [SerializeField] private ObjectPoolConfig _enemyPoolConfig;
+
+    [Inject] private DiContainer _container;
+
+    void Awake()
     {
         InitializeList(_playerBulletPoolConfig);
-        InitializeList(_tankPoolConfig);
+        InitializeList(_enemyPoolConfig);
     }
 
     public GameObject GetPlayerBullet()
@@ -17,9 +23,18 @@ public class ObjectPool : MonoBehaviour
         return GetPooledObject(_playerBulletPoolConfig);
     }    
     
-    public GameObject GetTank()
+    public GameObject GetEnemyTank()
     {
-        return GetPooledObject(_tankPoolConfig);
+        return GetPooledObject(_enemyPoolConfig);
+    }
+
+    public void DespawnEnemyTank(GameObject enemy)
+    {
+        enemy.SetActive(false);
+        if (IsPoolNotActive(_enemyPoolConfig))
+        {
+            OnAllEnemiesDeath?.Invoke();
+        }
     }
 
     private void InitializeList(ObjectPoolConfig config)
@@ -28,7 +43,7 @@ public class ObjectPool : MonoBehaviour
         GameObject tmp;
         for (int i = 0; i < config.poolCapacity; i++)
         {
-            tmp = Instantiate(config.objectPrefab, config.parentObject);
+            tmp = _container.InstantiatePrefab(config.objectPrefab, config.parentObject);
             tmp.SetActive(false);
             config.pooledObjects.Add(tmp);
         }
@@ -44,5 +59,17 @@ public class ObjectPool : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private bool IsPoolNotActive(ObjectPoolConfig config)
+    {
+        foreach (var item in config.pooledObjects)
+        {
+            if (item.activeInHierarchy)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

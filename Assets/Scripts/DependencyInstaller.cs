@@ -4,17 +4,17 @@ using Zenject;
 public class DependencyInstaller : MonoInstaller
 {
     [SerializeField] private ObjectPool _objectPool;
-    [SerializeField] private StateMachine _stateMachine;
+    [SerializeField] private GameManager _gameManager;
 
     public override void InstallBindings()
     {
         Container.Bind<ObjectPool>()
-            .To<ObjectPool>()
-            .FromInstance(_objectPool);
-
-        Container.Bind<StateMachine>()
-            .To<StateMachine>()
-            .FromInstance(_stateMachine);
+            .FromInstance(_objectPool)
+            .AsSingle();        
+        
+        Container.Bind<GameManager>()
+            .FromInstance(_gameManager)
+            .AsSingle();
 
         Container.Bind<ITankAI>()
             .To<RandomMovementAI>()

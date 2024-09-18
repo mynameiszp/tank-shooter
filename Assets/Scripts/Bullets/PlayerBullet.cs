@@ -17,17 +17,9 @@ public class PlayerBullet : Bullet
     private void OnCollisionEnter2D(Collision2D collision)
     {
         int collisionLayer = collision.gameObject.layer;
-
-        switch (collisionLayer)
+        if (collisionLayer == _boundaryLayer || collisionLayer == _enemyLayer)
         {
-            case int layer when layer == _boundaryLayer:
-                gameObject.SetActive(false);
-                break;
-
-            case int layer when layer == _enemyLayer:
-                gameObject.SetActive(false);
-                collision.gameObject.SetActive(false);
-                break;
+            gameObject.SetActive(false);
         }
     }
 }

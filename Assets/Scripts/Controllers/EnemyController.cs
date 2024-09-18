@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
 
 public class EnemyController : MonoBehaviour
 {
-    [Inject] private readonly StateMachine _stateMachine;
+    public event Action<GameObject> OnDestroy;
+
     [Inject] private readonly RotateState _rotateState;
     [Inject] private readonly MoveState _moveState;
 
@@ -13,24 +15,29 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float _rotationInterval;
     [SerializeField] private float _rotationDegree;
 
+    private StateMachine _stateMachine;
     private IEnumerator _stateCoroutine;
     private int _boundaryLayer;
     private int _playerLayer;
+    private int _bulletLayer;
 
     private const string PLAYER_LAYER = GameConstants.PLAYER_LAYER_NAME;
     private const string BOUNDARY_LAYER = GameConstants.BOUNDARY_LAYER_NAME;
+    private const string BULLET_LAYER = GameConstants.BULLET_LAYER_NAME;
 
     void Start()
     {
+
         InitializeLayers();
-        InitializeStates();
         InitializeStateMachine();
+        InitializeStates();
     }
 
     private void InitializeLayers()
     {
         _playerLayer = LayerMask.NameToLayer(PLAYER_LAYER);
         _boundaryLayer = LayerMask.NameToLayer(BOUNDARY_LAYER);
+        _bulletLayer = LayerMask.NameToLayer(BULLET_LAYER);
     }
 
     private void InitializeStates()
@@ -41,6 +48,10 @@ public class EnemyController : MonoBehaviour
 
     private void InitializeStateMachine()
     {
+        if (TryGetComponent(out StateMachine stateMachine))
+        {
+            _stateMachine = stateMachine;
+        }
         _stateMachine.OnStateChanged += ChangeState;
         _stateMachine.Initialize(_moveState);
     }
@@ -98,6 +109,10 @@ public class EnemyController : MonoBehaviour
         {
             StopCoroutine(_stateCoroutine);
             _stateMachine.TransitionTo(_rotateState);
+        }
+        else if (collisionLayer == _bulletLayer)
+        {
+            OnDestroy?.Invoke(gameObject);
         }
     }
 }
