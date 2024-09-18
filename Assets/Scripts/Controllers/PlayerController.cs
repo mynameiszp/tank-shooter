@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        MoveHorizontally();
+        Move();
         Rotate();
     }
 
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         _playerTank.Fire();
     }
 
-    private void MoveHorizontally()
+    private void Move()
     {
         transform.Translate(new Vector2(_moveInput.y * _movementSpeed, 0));
     }

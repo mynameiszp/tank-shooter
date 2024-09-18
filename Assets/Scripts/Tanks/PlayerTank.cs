@@ -1,5 +1,9 @@
+using Zenject;
+
 public class PlayerTank : Tank
 {
+    [Inject] protected ObjectPool objectPool;
+
     public override void Fire()
     {
         var bullet = objectPool.GetPlayerBullet();
