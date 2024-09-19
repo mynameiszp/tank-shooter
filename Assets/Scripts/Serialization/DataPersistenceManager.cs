@@ -5,12 +5,15 @@ using Zenject;
 
 public class DataPersistenceManager : MonoBehaviour
 {
+    public string FileName => _fileName;
+    public bool UseEncryption => _useEncryption;
+
     [Inject] private FileDataHandler _dataHandler; 
-    private List<IDataPersistence> _dataPersistenceObjects;
 
     [SerializeField] private string _fileName;
-    public string FileName => _fileName;
+    [SerializeField] private bool _useEncryption;
 
+    private List<IDataPersistence> _dataPersistenceObjects;
     private GameData _gameData;
 
     private void Start()

@@ -27,7 +27,7 @@ public class DependencyInstaller : MonoInstaller
         Container.Bind<FileDataHandler>()
             .To<JsonFileDataHandler>()
             .AsTransient()
-            .WithArguments(Application.persistentDataPath, _dataPersistenceManager.FileName);
+            .WithArguments(Application.persistentDataPath, _dataPersistenceManager.FileName, _dataPersistenceManager.UseEncryption);
 
         Container.Bind<RotateState>().AsTransient();
         Container.Bind<MoveState>().AsTransient();
