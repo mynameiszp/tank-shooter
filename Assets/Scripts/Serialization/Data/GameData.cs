@@ -9,5 +9,13 @@ public class GameData
     public GameData()
     {
         player = new PlayerData();
+        enemies = new List<EnemyData>();
+    }
+
+    public EnemyData CreateEnemy()
+    {
+        var enemy = new EnemyData();
+        enemies.Add(enemy);
+        return enemy;
     }
 }
