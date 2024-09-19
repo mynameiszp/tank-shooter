@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSpawnConfig
   m_EditorClassIdentifier: 
   spawnPoints:
-  - {x: -11.2, y: 7.2}
-  - {x: 11.2, y: 7.2}
-  - {x: -11.2, y: -7.2}
-  - {x: -11.2, y: -7.2}
+  - {x: -11, y: 7}
+  - {x: 11, y: 7}
+  - {x: -11, y: -7}
+  - {x: -11, y: -7}

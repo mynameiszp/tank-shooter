@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
         _playerTank.Fire();
     }
 
+    public void ResetInput()
+    {
+        _moveInput = Vector2.zero;
+    }
+
     private void Move()
     {
         transform.Translate(new Vector2(_moveInput.y * _movementSpeed, 0));
