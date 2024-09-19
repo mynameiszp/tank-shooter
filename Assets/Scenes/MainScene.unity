@@ -4659,7 +4659,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e1651e55a5e1c44e97e70a881be661a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpawnConfig: {fileID: 11400000, guid: 1af25d84aeab7ac46a0d80a4a8856109, type: 2}
 --- !u!4 &1098517156
 Transform:
   m_ObjectHideFlags: 0
@@ -4687,7 +4686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3917d7e4ce5c89d4f8fbed6025bfbeaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSpawnConfig: {fileID: 11400000, guid: 9e1b28f847fa5a845bb29a049dc6f47c, type: 2}
   _playerPrefab: {fileID: 4289493531048962804, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
   _initialPosition: {x: 0, y: 0, z: 0}
   _timeBeforeRespawn: 1
@@ -5116,6 +5114,8 @@ MonoBehaviour:
   _playerSpawnManager: {fileID: 1098517157}
   _cameraManager: {fileID: 147382704}
   _dataPersistenceManager: {fileID: 1181818919}
+  _playerSpawnConfig: {fileID: 11400000, guid: 9e1b28f847fa5a845bb29a049dc6f47c, type: 2}
+  _enemySpawnConfig: {fileID: 11400000, guid: 1af25d84aeab7ac46a0d80a4a8856109, type: 2}
 --- !u!4 &1565696934
 Transform:
   m_ObjectHideFlags: 0

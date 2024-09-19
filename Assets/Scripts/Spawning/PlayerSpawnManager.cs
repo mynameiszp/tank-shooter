@@ -8,19 +8,19 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 {
     public event Action<GameObject> OnPlayerSpawned;
 
-    [SerializeField] private SpawnManagerScriptableObject _playerSpawnConfig;
+    [Inject] private DiContainer _container;
+    [Inject] private ISpawnStrategy _spawningStrategy;
+
     [SerializeField] private PlayerTank _playerPrefab;
     [SerializeField] private Vector3 _initialPosition;
     [SerializeField] private float _timeBeforeRespawn;
-
-    [Inject] private DiContainer _container;
 
     private PlayerTank _playerTank;
     private List<Vector2> _spawnPoints;
 
     private void Awake()
     {
-        _spawnPoints = new List<Vector2>(_playerSpawnConfig.spawnPoints);
+        _spawnPoints = new List<Vector2>(_spawningStrategy.GetSpawnPoints());
         SpawnPlayer();
         _playerTank.OnDestroy += HandleDeath;
     }

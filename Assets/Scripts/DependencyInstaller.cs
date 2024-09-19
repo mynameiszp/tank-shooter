@@ -8,6 +8,9 @@ public class DependencyInstaller : MonoInstaller
     [SerializeField] private CameraManager _cameraManager;
     [SerializeField] private DataPersistenceManager _dataPersistenceManager;
 
+    [SerializeField] private SpawnManagerScriptableObject _playerSpawnConfig;
+    [SerializeField] private SpawnManagerScriptableObject _enemySpawnConfig;
+
     public override void InstallBindings()
     {
         Container.Bind<ObjectPool>()
@@ -37,5 +40,20 @@ public class DependencyInstaller : MonoInstaller
         Container.QueueForInject(_cameraManager);
 
         _playerSpawnManager.OnPlayerSpawned += _cameraManager.SetCameraTarget;
+
+        InitializeScriptableObjects();
+    }
+
+    private void InitializeScriptableObjects()
+    {
+        Container.Bind<ISpawnStrategy>()
+            .To<FixedPointsSpawnStrategy>()
+            .FromMethod(context => new FixedPointsSpawnStrategy(_playerSpawnConfig.spawnPoints))
+            .WhenInjectedInto<PlayerSpawnManager>();
+
+        Container.Bind<ISpawnStrategy>()
+            .To<FixedPointsSpawnStrategy>()
+            .FromMethod(context => new FixedPointsSpawnStrategy(_enemySpawnConfig.spawnPoints))
+            .WhenInjectedInto<EnemySpawnManager>();
     }
 }

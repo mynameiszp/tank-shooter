@@ -9,8 +9,8 @@ public class EnemySpawnManager : MonoBehaviour, IDataPersistence
     public event Action OnEnemyDataEmpty;
 
     [Inject] private ObjectPool _objectPool;
+    [Inject] private ISpawnStrategy _spawningStrategy;
 
-    [SerializeField] private SpawnManagerScriptableObject _enemySpawnConfig;
     private List<Vector2> _spawnPoints;
 
     void Awake()
@@ -21,7 +21,7 @@ public class EnemySpawnManager : MonoBehaviour, IDataPersistence
 
     private void SpawnEnemies()
     {
-        _spawnPoints = new List<Vector2>(_enemySpawnConfig.spawnPoints);
+        _spawnPoints = new List<Vector2>(_spawningStrategy.GetSpawnPoints());
         GameObject enemy;
         while ((enemy = _objectPool.GetEnemyTank()) != null && _spawnPoints.Count != 0)
         {
