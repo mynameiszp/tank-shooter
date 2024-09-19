@@ -4,12 +4,12 @@ using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-public class EnemySpawnManager : MonoBehaviour, IDataPersistence
+public class EnemySpawnManager : MonoBehaviour
 {
-    public event Action OnEnemyDataEmpty;
+    public Action OnEnemyDataEmpty;
 
-    [Inject] private ObjectPool _objectPool;
-    [Inject] private ISpawnStrategy _spawningStrategy;
+    [Inject] private readonly ObjectPool _objectPool;
+    [Inject] private readonly ISpawnStrategy _spawningStrategy;
 
     private List<Vector2> _spawnPoints;
 
@@ -29,7 +29,7 @@ public class EnemySpawnManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    private void InitializeEnemy(GameObject enemy, Vector3 position, Quaternion rotation)
+    public void InitializeEnemy(GameObject enemy, Vector3 position, Quaternion rotation)
     {
         enemy.transform.SetPositionAndRotation(position, rotation);
         enemy.SetActive(true);
@@ -55,41 +55,5 @@ public class EnemySpawnManager : MonoBehaviour, IDataPersistence
     private Quaternion GetRandomRotation()
     {
         return Quaternion.Euler(0, 0, Random.Range(0f, 360f));
-    }
-
-    public void LoadData(GameData gameData)
-    {
-        _objectPool.DespawnAllEnemyTanks();
-
-        foreach (var enemyData in gameData.enemies)
-        {
-            GameObject enemy = _objectPool.GetEnemyTank();
-            if (enemy != null)
-            {
-                InitializeEnemy(enemy, enemyData.position, enemyData.rotation);
-            }
-        }
-
-        if (gameData.enemies.Count == 0)
-        {
-            OnEnemyDataEmpty?.Invoke();
-        }
-    }
-
-    public void SaveData(GameData gameData)
-    {
-        gameData.enemies.Clear();
-
-        foreach (var enemy in _objectPool.ActiveEnemies)
-        {
-            if (enemy.activeInHierarchy)
-            {
-                Vector3 position = enemy.transform.position;
-                Quaternion rotation = enemy.transform.rotation;
-                var enemyData = gameData.CreateEnemy();
-                enemyData.position = position;
-                enemyData.rotation = rotation;
-            }
-        }
     }
 }

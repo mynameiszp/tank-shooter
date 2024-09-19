@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
+public class PlayerSpawnManager : MonoBehaviour
 {
     public event Action<GameObject> OnPlayerSpawned;
+    public PlayerTank PlayerTank => _playerTank;
 
-    [Inject] private DiContainer _container;
-    [Inject] private ISpawnStrategy _spawningStrategy;
+    [Inject] private readonly DiContainer _container;
+    [Inject] private readonly ISpawnStrategy _spawningStrategy;
 
     [SerializeField] private PlayerTank _playerPrefab;
     [SerializeField] private Vector3 _initialPosition;
@@ -65,17 +66,5 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
         int index = UnityEngine.Random.Range(0, _spawnPoints.Count);
         Vector2 pickedPosition = _spawnPoints[index];
         return pickedPosition;
-    }
-
-    public void LoadData(GameData gameData)
-    {
-        _playerTank.transform.position = gameData.player.position;
-        _playerTank.transform.rotation = gameData.player.rotation;
-    }
-
-    public void SaveData(GameData gameData)
-    {
-        gameData.player.position = _playerTank.transform.position;
-        gameData.player.rotation = _playerTank.transform.rotation;
     }
 }

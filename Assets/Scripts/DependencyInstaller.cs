@@ -5,6 +5,7 @@ public class DependencyInstaller : MonoInstaller
 {
     [SerializeField] private ObjectPool _objectPool;
     [SerializeField] private PlayerSpawnManager _playerSpawnManager;
+    [SerializeField] private EnemySpawnManager _enemySpawnManager;
     [SerializeField] private CameraManager _cameraManager;
     [SerializeField] private DataPersistenceManager _dataPersistenceManager;
 
@@ -13,6 +14,8 @@ public class DependencyInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
+        InitializeManagers(); 
+        
         Container.Bind<ObjectPool>()
             .FromInstance(_objectPool)
             .AsSingle();        
@@ -20,14 +23,6 @@ public class DependencyInstaller : MonoInstaller
         Container.Bind<ITankAI>()
             .To<RandomMovementAI>()
             .AsTransient();
-
-        Container.Bind<PlayerSpawnManager>()
-            .FromInstance(_playerSpawnManager)
-            .AsSingle();
-
-        Container.Bind<CameraManager>()
-            .FromInstance(_cameraManager)
-            .AsSingle();
 
         Container.Bind<FileDataHandler>()
             .To<JsonFileDataHandler>()
@@ -55,5 +50,20 @@ public class DependencyInstaller : MonoInstaller
             .To<FixedPointsSpawnStrategy>()
             .FromMethod(context => new FixedPointsSpawnStrategy(_enemySpawnConfig.spawnPoints))
             .WhenInjectedInto<EnemySpawnManager>();
+    }
+
+    private void InitializeManagers()
+    {
+        Container.Bind<PlayerSpawnManager>()
+            .FromInstance(_playerSpawnManager)
+            .AsSingle();
+
+        Container.Bind<EnemySpawnManager>()
+            .FromInstance(_enemySpawnManager)
+            .AsSingle();
+
+        Container.Bind<CameraManager>()
+            .FromInstance(_cameraManager)
+            .AsSingle();
     }
 }
