@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayerSpawnManager : MonoBehaviour
+public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 {
     public event Action<GameObject> OnPlayerSpawned;
 
@@ -18,7 +18,7 @@ public class PlayerSpawnManager : MonoBehaviour
     private PlayerTank _playerTank;
     private List<Vector2> _spawnPoints;
 
-    private void Start()
+    private void Awake()
     {
         _spawnPoints = new List<Vector2>(_playerSpawnConfig.spawnPoints);
         SpawnPlayer();
@@ -65,5 +65,17 @@ public class PlayerSpawnManager : MonoBehaviour
         int index = UnityEngine.Random.Range(0, _spawnPoints.Count);
         Vector2 pickedPosition = _spawnPoints[index];
         return pickedPosition;
+    }
+
+    public void LoadData(GameData gameData)
+    {
+        _playerTank.transform.position = gameData.player.position;
+        _playerTank.transform.rotation = gameData.player.rotation;
+    }
+
+    public void SaveData(GameData gameData)
+    {
+        gameData.player.position = _playerTank.transform.position;
+        gameData.player.rotation = _playerTank.transform.rotation;
     }
 }
