@@ -6,11 +6,14 @@ using Zenject;
 public class ObjectPool : MonoBehaviour
 {
     public event Action OnAllEnemiesDeath;
+    public List<GameObject> ActiveEnemies => _activeEnemies;
 
     [SerializeField] private ObjectPoolConfig _playerBulletPoolConfig;
     [SerializeField] private ObjectPoolConfig _enemyPoolConfig;
 
     [Inject] private DiContainer _container;
+
+    private List<GameObject> _activeEnemies = new List<GameObject>();
 
     void Awake()
     {
@@ -25,16 +28,34 @@ public class ObjectPool : MonoBehaviour
     
     public GameObject GetEnemyTank()
     {
-        return GetPooledObject(_enemyPoolConfig);
+        var enemy = GetPooledObject(_enemyPoolConfig);
+        if (enemy != null)
+        {
+            if (!_activeEnemies.Contains(enemy)) 
+            {
+                _activeEnemies.Add(enemy); 
+            }
+        }
+        return enemy;
     }
 
     public void DespawnEnemyTank(GameObject enemy)
     {
         enemy.SetActive(false);
+        _activeEnemies.Remove(enemy);
         if (IsPoolNotActive(_enemyPoolConfig))
         {
             OnAllEnemiesDeath?.Invoke();
         }
+    }
+
+    public void DespawnAllEnemyTanks()
+    {
+        foreach (var enemy in _activeEnemies)
+        {
+            enemy.SetActive(false);
+        }
+        _activeEnemies.Clear();
     }
 
     private void InitializeList(ObjectPoolConfig config)

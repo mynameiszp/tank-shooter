@@ -7,20 +7,21 @@ using Zenject;
 public class PlayerSpawnManager : MonoBehaviour
 {
     public event Action<GameObject> OnPlayerSpawned;
+    public PlayerTank PlayerTank => _playerTank;
 
-    [SerializeField] private SpawnManagerScriptableObject _playerSpawnConfig;
+    [Inject] private readonly DiContainer _container;
+    [Inject] private readonly ISpawnStrategy _spawningStrategy;
+
     [SerializeField] private PlayerTank _playerPrefab;
     [SerializeField] private Vector3 _initialPosition;
     [SerializeField] private float _timeBeforeRespawn;
 
-    [Inject] private DiContainer _container;
-
     private PlayerTank _playerTank;
     private List<Vector2> _spawnPoints;
 
-    private void Start()
+    private void Awake()
     {
-        _spawnPoints = new List<Vector2>(_playerSpawnConfig.spawnPoints);
+        _spawnPoints = new List<Vector2>(_spawningStrategy.GetSpawnPoints());
         SpawnPlayer();
         _playerTank.OnDestroy += HandleDeath;
     }

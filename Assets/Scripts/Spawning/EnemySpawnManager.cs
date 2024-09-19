@@ -1,33 +1,37 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public class EnemySpawnManager : MonoBehaviour
 {
-    [Inject] private ObjectPool _objectPool;
+    public Action OnEnemyDataEmpty;
 
-    [SerializeField] private SpawnManagerScriptableObject _enemySpawnConfig;
+    [Inject] private readonly ObjectPool _objectPool;
+    [Inject] private readonly ISpawnStrategy _spawningStrategy;
+
     private List<Vector2> _spawnPoints;
 
-    void Start()
+    void Awake()
     {
-        SpawnEnemies();
+        OnEnemyDataEmpty += SpawnEnemies;
         _objectPool.OnAllEnemiesDeath += SpawnEnemies;
     }
 
     private void SpawnEnemies()
     {
-        _spawnPoints = new List<Vector2>(_enemySpawnConfig.spawnPoints);
+        _spawnPoints = new List<Vector2>(_spawningStrategy.GetSpawnPoints());
         GameObject enemy;
         while ((enemy = _objectPool.GetEnemyTank()) != null && _spawnPoints.Count != 0)
         {
-            InitializeEnemy(enemy);
+            InitializeEnemy(enemy, GetRandomPosition(), GetRandomRotation());
         }
     }
 
-    private void InitializeEnemy(GameObject enemy)
+    public void InitializeEnemy(GameObject enemy, Vector3 position, Quaternion rotation)
     {
-        enemy.transform.SetPositionAndRotation(GetRandomPosition(), GetRandomRotation());
+        enemy.transform.SetPositionAndRotation(position, rotation);
         enemy.SetActive(true);
         if (enemy.TryGetComponent(out EnemyController controller))
         {
