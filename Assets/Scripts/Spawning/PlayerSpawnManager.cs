@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using Zenject;
 
 public class PlayerSpawnManager : MonoBehaviour
@@ -11,17 +12,17 @@ public class PlayerSpawnManager : MonoBehaviour
 
     [Inject] private readonly DiContainer _container;
     [Inject] private readonly ISpawnStrategy _spawningStrategy;
+    [Inject] private readonly AvailableAreaDetector _availableAreaDetector;
 
     [SerializeField] private PlayerTank _playerPrefab;
     [SerializeField] private Vector3 _initialPosition;
     [SerializeField] private float _timeBeforeRespawn;
 
     private PlayerTank _playerTank;
-    private List<Vector2> _spawnPoints;
+    private float _timebeforeRetry = 1f;
 
     private void Awake()
     {
-        _spawnPoints = new List<Vector2>(_spawningStrategy.GetSpawnPoints());
         SpawnPlayer();
         _playerTank.OnDestroy += HandleDeath;
     }
@@ -50,7 +51,16 @@ public class PlayerSpawnManager : MonoBehaviour
     private IEnumerator RespawnPlayer()
     {
         yield return new WaitForSeconds(_timeBeforeRespawn);
-        InitializePlayer(GetRandomPosition());
+        Vector2 spawnPosition = GetPosition();
+
+        while (!_availableAreaDetector.IsAreaAvailable(spawnPosition))
+        {
+            Debug.LogWarning("No available spawn points, retrying...");
+            yield return new WaitForSeconds(_timebeforeRetry); 
+            spawnPosition = GetPosition();
+        }
+
+        InitializePlayer(spawnPosition);
     }
 
     private void ResetPlayerInput()
@@ -60,11 +70,23 @@ public class PlayerSpawnManager : MonoBehaviour
             playerController.ResetInput();
         }
     }
-
-    private Vector2 GetRandomPosition()
+    private Vector2 GetPosition()
     {
-        int index = UnityEngine.Random.Range(0, _spawnPoints.Count);
-        Vector2 pickedPosition = _spawnPoints[index];
+        List<Vector2> availableSpawnPoints = _spawningStrategy.GetSpawnPoints();
+        Vector2 pickedPosition = GetRandomPosition(availableSpawnPoints);
+
+        while (!_availableAreaDetector.IsAreaAvailable(pickedPosition) && availableSpawnPoints.Count > 1)
+        {
+            availableSpawnPoints.Remove(pickedPosition);
+            pickedPosition = GetRandomPosition(availableSpawnPoints);
+        }
+        return pickedPosition;
+    }
+
+    private Vector2 GetRandomPosition(List<Vector2> positions)
+    {
+        int index = Random.Range(0, positions.Count);
+        Vector2 pickedPosition = positions[index];
         return pickedPosition;
     }
 }

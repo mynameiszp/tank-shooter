@@ -4761,6 +4761,7 @@ GameObject:
   - component: {fileID: 1098517156}
   - component: {fileID: 1098517157}
   - component: {fileID: 1098517155}
+  - component: {fileID: 1098517158}
   m_Layer: 0
   m_Name: SpawnManager
   m_TagString: Untagged
@@ -4810,6 +4811,22 @@ MonoBehaviour:
   _playerPrefab: {fileID: 4289493531048962804, guid: 608f9741e7ac8ec4682ea3d0ac7c0434, type: 3}
   _initialPosition: {x: 0, y: 0, z: 0}
   _timeBeforeRespawn: 1
+--- !u!114 &1098517158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098517154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d97ac0223c657d4c9e6da967fce01ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _areaRadius: 2
+  _detectionLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &1162788881
 GameObject:
   m_ObjectHideFlags: 0
@@ -4917,6 +4934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fileName: gamedata.json
+  _useEncryption: 1
 --- !u!4 &1181818920
 Transform:
   m_ObjectHideFlags: 0
@@ -5236,6 +5254,7 @@ MonoBehaviour:
   _enemySpawnManager: {fileID: 1098517155}
   _cameraManager: {fileID: 147382704}
   _dataPersistenceManager: {fileID: 1181818919}
+  _areaDetector: {fileID: 1098517158}
   _playerSpawnConfig: {fileID: 11400000, guid: 9e1b28f847fa5a845bb29a049dc6f47c, type: 2}
   _enemySpawnConfig: {fileID: 11400000, guid: 1af25d84aeab7ac46a0d80a4a8856109, type: 2}
 --- !u!4 &1565696934

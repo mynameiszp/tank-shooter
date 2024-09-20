@@ -8,6 +8,7 @@ public class DependencyInstaller : MonoInstaller
     [SerializeField] private EnemySpawnManager _enemySpawnManager;
     [SerializeField] private CameraManager _cameraManager;
     [SerializeField] private DataPersistenceManager _dataPersistenceManager;
+    [SerializeField] private AvailableAreaDetector _areaDetector;
 
     [SerializeField] private SpawnManagerScriptableObject _playerSpawnConfig;
     [SerializeField] private SpawnManagerScriptableObject _enemySpawnConfig;
@@ -18,6 +19,10 @@ public class DependencyInstaller : MonoInstaller
         
         Container.Bind<ObjectPool>()
             .FromInstance(_objectPool)
+            .AsSingle();         
+        
+        Container.Bind<AvailableAreaDetector>()
+            .FromInstance(_areaDetector)
             .AsSingle();        
         
         Container.Bind<ITankAI>()
