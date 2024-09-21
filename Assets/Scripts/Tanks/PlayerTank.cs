@@ -12,6 +12,7 @@ public class PlayerTank : Tank
 
     private void Start()
     {
+        SetRelativePosition();
         _enemyLayer = LayerMask.NameToLayer(ENEMY_LAYER);
     }
 
