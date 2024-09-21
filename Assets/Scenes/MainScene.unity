@@ -5255,6 +5255,7 @@ MonoBehaviour:
   _cameraManager: {fileID: 147382704}
   _dataPersistenceManager: {fileID: 1181818919}
   _areaDetector: {fileID: 1098517158}
+  _playerTankConfig: {fileID: 11400000, guid: e5b3ae0096fd6c84682e19ec96901d10, type: 2}
   _playerSpawnConfig: {fileID: 11400000, guid: 9e1b28f847fa5a845bb29a049dc6f47c, type: 2}
   _enemySpawnConfig: {fileID: 11400000, guid: 1af25d84aeab7ac46a0d80a4a8856109, type: 2}
 --- !u!4 &1565696934

@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _movementSpeed;
-    [SerializeField] private float _rotationDegree;
+    [Inject] private IMovementStrategy _moveStrategy;
+
     private Vector2 _moveInput;
     private PlayerTank _playerTank;
 
@@ -40,11 +41,11 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        transform.Translate(new Vector2(_moveInput.y * _movementSpeed, 0));
+        transform.Translate(_moveStrategy.GetDirection(_moveInput));
     }
 
     private void Rotate()
     {
-        transform.Rotate(0f, 0f, -_moveInput.x * _rotationDegree);
+        transform.Rotate(_moveStrategy.GetRotation(_moveInput));
     }
 }

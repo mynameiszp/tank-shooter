@@ -10,6 +10,7 @@ public class DependencyInstaller : MonoInstaller
     [SerializeField] private DataPersistenceManager _dataPersistenceManager;
     [SerializeField] private AvailableAreaDetector _areaDetector;
 
+    [SerializeField] private TankConfig _playerTankConfig;
     [SerializeField] private SpawnManagerScriptableObject _playerSpawnConfig;
     [SerializeField] private SpawnManagerScriptableObject _enemySpawnConfig;
 
@@ -33,6 +34,11 @@ public class DependencyInstaller : MonoInstaller
             .To<JsonFileDataHandler>()
             .AsTransient()
             .WithArguments(Application.persistentDataPath, _dataPersistenceManager.FileName, _dataPersistenceManager.UseEncryption);
+
+        Container.Bind<IMovementStrategy>()
+            .To<BasicTankMovement>()
+            .AsTransient()
+            .WithArguments(_playerTankConfig.moveSpeed, _playerTankConfig.rotationSpeed);
 
         Container.Bind<RotateState>().AsTransient();
         Container.Bind<MoveState>().AsTransient();
