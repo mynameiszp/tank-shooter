@@ -10,7 +10,10 @@ public abstract class Tank : MonoBehaviour
     {
         _relativePosition = GetRightEdgePosition(barrel);
     }
-    public abstract void Fire();
+    public virtual void Fire()
+    {
+        Debug.Log("Fire");
+    }
 
     public void InitializeBullet(Bullet bullet)
     {

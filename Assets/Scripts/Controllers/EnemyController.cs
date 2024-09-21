@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
 
 public class EnemyController : MonoBehaviour
 {
-    public event Action<GameObject> OnDestroy;
+    //public event Action<GameObject> OnDestroy;
 
     [Inject] private readonly RotateState _rotateState;
     [Inject] private readonly MoveState _moveState;
@@ -17,6 +16,7 @@ public class EnemyController : MonoBehaviour
 
     private StateMachine _stateMachine;
     private IEnumerator _stateCoroutine;
+    private EnemyTank _enemyTank;
     private int _boundaryLayer;
     private int _playerLayer;
     private int _bulletLayer;
@@ -27,10 +27,14 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-
         InitializeLayers();
         InitializeStateMachine();
         InitializeStates();
+        if (TryGetComponent(out EnemyTank enemyTank))
+        {
+            _enemyTank = enemyTank;
+            _enemyTank.OnCollision += HandleCollision;
+        }
     }
 
     private void InitializeLayers()
@@ -102,17 +106,9 @@ public class EnemyController : MonoBehaviour
         _stateMachine.TransitionTo(nextState);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void HandleCollision()
     {
-        int collisionLayer = collision.gameObject.layer;
-        if (collisionLayer == _playerLayer || collisionLayer == _boundaryLayer)
-        {
-            StopCoroutine(_stateCoroutine);
-            _stateMachine.TransitionTo(_rotateState);
-        }
-        else if (collisionLayer == _bulletLayer)
-        {
-            OnDestroy?.Invoke(gameObject);
-        }
+        StopCoroutine(_stateCoroutine);
+        _stateMachine.TransitionTo(_rotateState);
     }
 }
