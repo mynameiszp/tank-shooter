@@ -19,13 +19,11 @@ public class PlayerTank : Tank
     public override void Fire()
     {
         var bullet = _objectPool.GetPlayerBullet();
-        if (bullet != null)
+        if (bullet != null && bullet.TryGetComponent(out PlayerBullet bulletComponent))
         {
-            InitializeBullet(bullet);
-            if (bullet.TryGetComponent(out PlayerBullet bulletComponent))
-            {
-                bulletComponent.Move();
-            }
+            InitializeBullet(bulletComponent);
+            bullet.SetActive(true);
+            bulletComponent.Move();
         }
     }
 

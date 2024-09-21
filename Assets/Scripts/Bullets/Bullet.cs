@@ -9,4 +9,9 @@ public abstract class Bullet : MonoBehaviour
     {
         _rigidbody.AddForce(transform.right * _bulletSpeed, ForceMode2D.Impulse);
     }
+
+    public virtual void InitializeBullet(Vector3 position, Quaternion rotation)
+    {
+        transform.SetPositionAndRotation(position, rotation);
+    }
 }
