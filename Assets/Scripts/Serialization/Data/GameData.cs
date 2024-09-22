@@ -5,11 +5,13 @@ public class GameData
 {
     public PlayerData player;
     public List<EnemyData> enemies;
+    public int aliveEnemies;
 
     public GameData()
     {
         player = new PlayerData();
         enemies = new List<EnemyData>();
+        aliveEnemies = 0;
     }
 
     public EnemyData CreateEnemy()

@@ -39,6 +39,11 @@ public class ObjectPool : MonoBehaviour
         return enemy;
     }
 
+    public int GetEnemiesPoolSize()
+    {
+        return _enemyPoolConfig.poolCapacity;
+    }
+
     public void DespawnEnemyTank(GameObject enemy)
     {
         enemy.SetActive(false);
