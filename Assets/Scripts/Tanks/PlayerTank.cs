@@ -12,19 +12,18 @@ public class PlayerTank : Tank
 
     private void Start()
     {
+        SetRelativePosition();
         _enemyLayer = LayerMask.NameToLayer(ENEMY_LAYER);
     }
 
     public override void Fire()
     {
         var bullet = _objectPool.GetPlayerBullet();
-        if (bullet != null)
+        if (bullet != null && bullet.TryGetComponent(out PlayerBullet bulletComponent))
         {
-            InitializeBullet(bullet);
-            if (bullet.TryGetComponent(out PlayerBullet bulletComponent))
-            {
-                bulletComponent.Move();
-            }
+            InitializeBullet(bulletComponent);
+            bullet.SetActive(true);
+            bulletComponent.Move();
         }
     }
 

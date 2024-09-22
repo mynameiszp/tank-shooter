@@ -33,15 +33,15 @@ public class EnemySpawnManager : MonoBehaviour
     {
         enemy.transform.SetPositionAndRotation(position, rotation);
         enemy.SetActive(true);
-        if (enemy.TryGetComponent(out EnemyController controller))
+        if (enemy.TryGetComponent(out EnemyTank tank))
         {
-            controller.OnDestroy += DespawnEnemy;
+            tank.OnDestroy += DespawnEnemy;
         }
     }
 
     private void DespawnEnemy(GameObject enemy)
     {
-        enemy.GetComponent<EnemyController>().OnDestroy -= DespawnEnemy;
+        enemy.GetComponent<EnemyTank>().OnDestroy -= DespawnEnemy;
         _objectPool.DespawnEnemyTank(enemy);
     }
 

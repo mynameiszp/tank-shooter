@@ -75,8 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f04aadcc9201574eadb690335545e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 0.07
-  _rotationDegree: 2
 --- !u!114 &4289493531048962804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdec2dc1b69d23543aaeafd5bf05282e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _barrel: {fileID: 8930994768440835}
+  barrel: {fileID: 8930994768440835}
 --- !u!114 &65198919349832824
 MonoBehaviour:
   m_ObjectHideFlags: 0
