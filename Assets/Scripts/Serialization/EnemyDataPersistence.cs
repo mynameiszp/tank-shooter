@@ -40,5 +40,7 @@ public class EnemyDataPersistence : MonoBehaviour, IDataPersistence
                 enemyData.rotation = rotation;
             }
         }
+
+        gameData.aliveEnemies = _enemySpawner.GetAliveEnemiesCount();
     }
 }

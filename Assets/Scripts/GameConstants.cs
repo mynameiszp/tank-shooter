@@ -4,4 +4,6 @@ public static class GameConstants
     public const string PLAYER_LAYER_NAME = "Player";
     public const string BOUNDARY_LAYER_NAME = "MovBoundary";
     public const string BULLET_LAYER_NAME = "Bullet";
+
+    public const string GAME_SCENE_NAME = "GameScene";
 }
