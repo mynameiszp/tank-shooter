@@ -1,18 +1,21 @@
 using System;
 using System.IO;
+using System.Xml.Serialization;
 using UnityEngine;
 using Zenject;
 
-public class JsonFileDataHandler : FileDataHandler
+public class XmlFileDataHandler : FileDataHandler
 {
     [Inject] private readonly IEncryptor _encryptor;
 
+    private string _dataDirPath = "";
+    private string _dataFileName = "";
     private bool _useEncryption;
 
-    public JsonFileDataHandler(string DirPath, string FileName, bool useEncryption)
+    public XmlFileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
     {
-        dataDirPath = DirPath;
-        dataFileName = FileName;
+        _dataDirPath = dataDirPath;
+        _dataFileName = dataFileName;
         _useEncryption = useEncryption;
     }
 
@@ -28,7 +31,9 @@ public class JsonFileDataHandler : FileDataHandler
                 dataToLoad = _encryptor.EncryptDecrypt(dataToLoad);
             }
 
-            loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+            XmlSerializer serializer = new XmlSerializer(typeof(GameData));
+            using StringReader stringReader = new StringReader(dataToLoad);
+            loadedData = (GameData)serializer.Deserialize(stringReader);
         }
         catch (Exception e)
         {
@@ -39,12 +44,19 @@ public class JsonFileDataHandler : FileDataHandler
 
     public override void Save(GameData gameData)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        string fullPath = Path.Combine(_dataDirPath, _dataFileName);
 
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-            string dataToStore = JsonUtility.ToJson(gameData, true);
+
+            XmlSerializer serializer = new XmlSerializer(typeof(GameData));
+            string dataToStore;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                serializer.Serialize(stringWriter, gameData);
+                dataToStore = stringWriter.ToString();
+            }
 
             if (_useEncryption)
             {

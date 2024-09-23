@@ -35,6 +35,10 @@ public class DependencyInstaller : MonoInstaller
             .AsTransient()
             .WithArguments(Application.persistentDataPath, _dataPersistenceManager.FileName, _dataPersistenceManager.UseEncryption);
 
+        Container.Bind<IEncryptor>()
+            .To<XorEncryptor>()
+            .AsTransient();
+        
         Container.Bind<IMovementStrategy>()
             .To<BasicTankMovement>()
             .AsTransient()
