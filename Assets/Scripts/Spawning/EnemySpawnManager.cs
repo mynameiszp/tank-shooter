@@ -12,12 +12,14 @@ public class EnemySpawnManager : MonoBehaviour
     [Inject] private readonly ObjectPool _objectPool;
     [Inject] private readonly ISpawnStrategy _spawningStrategy;
 
-    private List<Vector2> _spawnPoints;
+    private List<Vector2> _uniqueSpawnPoints;
+    private List<Vector2> _initialSpawnPoints;
     private int _aliveEnemiesCount;
 
     void Awake()
     {
-        _spawnPoints = _spawningStrategy.GetSpawnPoints();
+        _uniqueSpawnPoints = _spawningStrategy.GetSpawnPoints();
+        _initialSpawnPoints = _spawningStrategy.GetSpawnPoints();
         OnEnemyDataEmpty += SpawnEnemies;
         _objectPool.OnAllEnemiesDeath += SpawnEnemies;
     }
@@ -40,16 +42,16 @@ public class EnemySpawnManager : MonoBehaviour
 
     public int GetTotalEnemiesCount()
     {
-        var pointsCount = _spawnPoints.Count;
+        var pointsCount = _initialSpawnPoints.Count;
         var poolSize = _objectPool.GetEnemiesPoolSize();
         return pointsCount >= poolSize ? poolSize : pointsCount;
     }
 
     private void SpawnEnemies()
     {
-        _spawnPoints = _spawningStrategy.GetSpawnPoints();
+        _uniqueSpawnPoints = _spawningStrategy.GetSpawnPoints();
         GameObject enemy;
-        while ((enemy = _objectPool.GetEnemyTank()) != null && _spawnPoints.Count != 0)
+        while ((enemy = _objectPool.GetEnemyTank()) != null && _uniqueSpawnPoints.Count != 0)
         {
             InitializeEnemy(enemy, GetRandomPosition(), GetRandomRotation());
         }
@@ -64,9 +66,9 @@ public class EnemySpawnManager : MonoBehaviour
 
     private Vector2 GetRandomPosition()
     {
-        int index = Random.Range(0, _spawnPoints.Count);
-        Vector2 pickedPosition = _spawnPoints[index];
-        _spawnPoints.RemoveAt(index);
+        int index = Random.Range(0, _uniqueSpawnPoints.Count);
+        Vector2 pickedPosition = _uniqueSpawnPoints[index];
+        _uniqueSpawnPoints.RemoveAt(index);
         return pickedPosition;
     }
     private Quaternion GetRandomRotation()

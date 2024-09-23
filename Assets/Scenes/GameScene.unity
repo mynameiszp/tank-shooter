@@ -4681,12 +4681,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerBulletPoolConfig:
     parentObject: {fileID: 138311629}
-    poolCapacity: 3
+    poolCapacity: 10
     objectPrefab: {fileID: 4946420921237225799, guid: e0fe392f9a4a63f4fb755e68d8f868db, type: 3}
     pooledObjects: []
   _enemyPoolConfig:
     parentObject: {fileID: 1965340876}
-    poolCapacity: 4
+    poolCapacity: 10
     objectPrefab: {fileID: 7758391093305072673, guid: 50d1fbc3ee5486047b8cff49de8c704c, type: 3}
     pooledObjects: []
 --- !u!1 &706198546
