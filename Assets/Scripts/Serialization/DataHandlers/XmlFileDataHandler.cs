@@ -19,43 +19,30 @@ public class XmlFileDataHandler : FileDataHandler
         _useEncryption = useEncryption;
     }
 
-    public GameData Load()
+    public override GameData Load()
     {
-        string fullPath = Path.Combine(_dataDirPath, _dataFileName);
         GameData loadedData = null;
-        if (File.Exists(fullPath))
+        try
         {
-            try
-            {
-                string dataToLoad = "";
-                using (FileStream stream = new FileStream(fullPath, FileMode.Open))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        dataToLoad = reader.ReadToEnd();
-                    }
-                }
+            string dataToLoad = GetDataToLoad();
 
-                if (_useEncryption)
-                {
-                    dataToLoad = _encryptor.EncryptDecrypt(dataToLoad);
-                }
-
-                XmlSerializer serializer = new XmlSerializer(typeof(GameData));
-                using (StringReader stringReader = new StringReader(dataToLoad))
-                {
-                    loadedData = (GameData)serializer.Deserialize(stringReader);
-                }
-            }
-            catch (Exception e)
+            if (_useEncryption)
             {
-                Debug.LogError("Error while loading data from file: " + fullPath + "\n" + e);
+                dataToLoad = _encryptor.EncryptDecrypt(dataToLoad);
             }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(GameData));
+            using StringReader stringReader = new StringReader(dataToLoad);
+            loadedData = (GameData)serializer.Deserialize(stringReader);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error while loading data from file: " + dataFileName + "\n" + e);
         }
         return loadedData;
     }
 
-    public void Save(GameData gameData)
+    public override void Save(GameData gameData)
     {
         string fullPath = Path.Combine(_dataDirPath, _dataFileName);
 
@@ -76,13 +63,9 @@ public class XmlFileDataHandler : FileDataHandler
                 dataToStore = _encryptor.EncryptDecrypt(dataToStore);
             }
 
-            using (FileStream stream = new FileStream(fullPath, FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.Write(dataToStore);
-                }
-            }
+            using FileStream stream = new FileStream(fullPath, FileMode.Create);
+            using StreamWriter writer = new StreamWriter(stream);
+            writer.Write(dataToStore);
         }
         catch (Exception e)
         {

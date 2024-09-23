@@ -7,52 +7,39 @@ public class JsonFileDataHandler : FileDataHandler
 {
     [Inject] private readonly IEncryptor _encryptor;
 
-    private string _dataDirPath = "";
-    private string _dataFileName = "";
     private bool _useEncryption;
 
-    public JsonFileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
+    public JsonFileDataHandler(string DirPath, string FileName, bool useEncryption)
     {
-        _dataDirPath = dataDirPath;
-        _dataFileName = dataFileName;
+        dataDirPath = DirPath;
+        dataFileName = FileName;
         _useEncryption = useEncryption;
     }
 
-    public GameData Load()
+    public override GameData Load()
     {
-        string fullPath = Path.Combine(_dataDirPath, _dataFileName);
         GameData loadedData = null;
-        if (File.Exists(fullPath))
+        try
         {
-            try
-            {
-                string dataToLoad = "";
-                using (FileStream stream = new FileStream(fullPath, FileMode.Open))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        dataToLoad = reader.ReadToEnd();
-                    }
-                }
+            string dataToLoad = GetDataToLoad();
 
-                if (_useEncryption)
-                {
-                    dataToLoad = _encryptor.EncryptDecrypt(dataToLoad);
-                }
-
-                loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
-            }
-            catch (Exception e)
+            if (_useEncryption)
             {
-                Debug.LogError("Error while loading data from file: " + fullPath + "\n" + e);
+                dataToLoad = _encryptor.EncryptDecrypt(dataToLoad);
             }
+
+            loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error while loading data from file: " + dataFileName + "\n" + e);
         }
         return loadedData;
     }
 
-    public void Save(GameData gameData)
+    public override void Save(GameData gameData)
     {
-        string fullPath = Path.Combine(_dataDirPath, _dataFileName);
+        string fullPath = Path.Combine(dataDirPath, dataFileName);
 
         try
         {
@@ -64,13 +51,9 @@ public class JsonFileDataHandler : FileDataHandler
                 dataToStore = _encryptor.EncryptDecrypt(dataToStore);
             }
 
-            using (FileStream stream = new FileStream(fullPath, FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.Write(dataToStore);
-                }
-            }
+            using FileStream stream = new FileStream(fullPath, FileMode.Create);
+            using StreamWriter writer = new StreamWriter(stream);
+            writer.Write(dataToStore);
         }
         catch (Exception e)
         {
