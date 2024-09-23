@@ -77,7 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementInterval: 10
   _moveSpeed: 0.02
-  _rotationInterval: 2
+  _rotationInterval: 1.7
   _rotationDegree: 30
 --- !u!114 &5343575573676476984
 MonoBehaviour:
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17139884035993a4497b7f528128f60b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrel: {fileID: 7530144985997538880}
 --- !u!1001 &7305929112783341338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -251,6 +252,11 @@ BoxCollider2D:
 --- !u!4 &7530144984544020283 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1000833922525642785, guid: 528f60aec4f2747ed9a8c7694b313e24, type: 3}
+  m_PrefabInstance: {fileID: 7305929112783341338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7530144985997538880 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1000833921802350938, guid: 528f60aec4f2747ed9a8c7694b313e24, type: 3}
   m_PrefabInstance: {fileID: 7305929112783341338}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7530144985997538894 stripped

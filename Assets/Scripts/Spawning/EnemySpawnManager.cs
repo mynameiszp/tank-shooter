@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -11,10 +13,15 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Inject] private readonly ObjectPool _objectPool;
     [Inject] private readonly ISpawnStrategy _spawningStrategy;
+    [Inject] private readonly AvailableAreaDetector _availableAreaDetector;
 
     private List<Vector2> _uniqueSpawnPoints;
     private List<Vector2> _initialSpawnPoints;
     private int _aliveEnemiesCount;
+
+    private float _timebeforeRetry = 1f;
+    private const string ENEMY_LAYER = GameConstants.ENEMY_LAYER_NAME;
+    private const string PLAYER_LAYER = GameConstants.PLAYER_LAYER_NAME;
 
     void Awake()
     {
@@ -31,6 +38,7 @@ public class EnemySpawnManager : MonoBehaviour
         if (enemy.TryGetComponent(out EnemyTank tank))
         {
             tank.OnDestroy += DespawnEnemy;
+            tank.OnEnemiesCollision += RespawnEnemyRandomly;
         }
         _aliveEnemiesCount++;
     }
@@ -53,7 +61,7 @@ public class EnemySpawnManager : MonoBehaviour
         GameObject enemy;
         while ((enemy = _objectPool.GetEnemyTank()) != null && _uniqueSpawnPoints.Count != 0)
         {
-            InitializeEnemy(enemy, GetRandomPosition(), GetRandomRotation());
+            InitializeEnemy(enemy, GetUniqueRandomPosition(), GetRandomRotation());
         }
     }
 
@@ -63,12 +71,48 @@ public class EnemySpawnManager : MonoBehaviour
         _objectPool.DespawnEnemyTank(enemy);
         _aliveEnemiesCount--;
     }
-
-    private Vector2 GetRandomPosition()
+    private void RespawnEnemyRandomly(GameObject enemy)
+    {
+        DespawnEnemy(enemy);
+        SpawnEnemyRandomly();
+    }
+    private void SpawnEnemyRandomly()
+    {
+        GameObject enemy = _objectPool.GetEnemyTank();
+        if (enemy != null)
+        {
+            InitializeEnemy(enemy, GetAvailablePosition(), GetRandomRotation());
+        }
+    }
+    private Vector2 GetUniqueRandomPosition()
     {
         int index = Random.Range(0, _uniqueSpawnPoints.Count);
         Vector2 pickedPosition = _uniqueSpawnPoints[index];
         _uniqueSpawnPoints.RemoveAt(index);
+        return pickedPosition;
+    }
+    private Vector2 GetAvailablePosition()
+    {
+        Vector2 spawnPosition = GetRandomPosition();
+        while (!_availableAreaDetector.IsAreaAvailable(spawnPosition, LayerMask.NameToLayer(ENEMY_LAYER)) &&
+            !_availableAreaDetector.IsAreaAvailable(spawnPosition, LayerMask.NameToLayer(PLAYER_LAYER)))
+        {
+            Debug.Log("Changing position");
+            StartCoroutine(WaitBeforeRetry(_timebeforeRetry));
+            spawnPosition = GetRandomPosition();
+        }
+        return spawnPosition;
+    }
+    private IEnumerator WaitBeforeRetry(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
+
+    private Vector2 GetRandomPosition()
+    {
+        var positions = _spawningStrategy.GetSpawnPoints();
+        int index = Random.Range(0, positions.Count);
+        Vector2 pickedPosition = positions[index];
         return pickedPosition;
     }
     private Quaternion GetRandomRotation()

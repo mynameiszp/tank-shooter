@@ -4,8 +4,6 @@ using Zenject;
 
 public class EnemyController : MonoBehaviour
 {
-    //public event Action<GameObject> OnDestroy;
-
     [Inject] private readonly RotateState _rotateState;
     [Inject] private readonly MoveState _moveState;
 

@@ -20,6 +20,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
     private PlayerTank _playerTank;
     private float _timebeforeRetry = 1f;
+    private const string ENEMY_LAYER = GameConstants.ENEMY_LAYER_NAME;
 
     private void Awake()
     {
@@ -53,9 +54,9 @@ public class PlayerSpawnManager : MonoBehaviour
         yield return new WaitForSeconds(_timeBeforeRespawn);
         Vector2 spawnPosition = GetPosition();
 
-        while (!_availableAreaDetector.IsAreaAvailable(spawnPosition))
+        while (!_availableAreaDetector.IsAreaAvailable(spawnPosition, LayerMask.NameToLayer(ENEMY_LAYER)))
         {
-            Debug.LogWarning("No available spawn points, retrying...");
+            Debug.LogWarning("No available player spawn points, retrying...");
             yield return new WaitForSeconds(_timebeforeRetry); 
             spawnPosition = GetPosition();
         }
@@ -75,7 +76,8 @@ public class PlayerSpawnManager : MonoBehaviour
         List<Vector2> availableSpawnPoints = _spawningStrategy.GetSpawnPoints();
         Vector2 pickedPosition = GetRandomPosition(availableSpawnPoints);
 
-        while (!_availableAreaDetector.IsAreaAvailable(pickedPosition) && availableSpawnPoints.Count > 1)
+        while (!_availableAreaDetector.IsAreaAvailable(pickedPosition, LayerMask.NameToLayer(ENEMY_LAYER)) && 
+            availableSpawnPoints.Count > 1)
         {
             availableSpawnPoints.Remove(pickedPosition);
             pickedPosition = GetRandomPosition(availableSpawnPoints);
